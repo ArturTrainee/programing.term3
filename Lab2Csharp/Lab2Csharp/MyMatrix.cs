@@ -26,8 +26,8 @@ namespace Lab2Sharp
     public class MyMatrix
     {
         private double[,] matrix;
-        public int Widgth { get; }
-        public int Height { get; }
+        public int Widgth { get; private set; }
+        public int Height { get; private set; }
         public double[,] Matrix { get; }
 
         public MyMatrix(double[,] matrix)
@@ -36,6 +36,7 @@ namespace Lab2Sharp
             Widgth = matrix.GetLength(1);
             this.matrix = new double[Height, Widgth];
             Array.Copy(matrix, this.matrix, matrix.Length);
+            Matrix = this.matrix;
         }
         
         public MyMatrix(MyMatrix matrixToCopy) : this(matrixToCopy.matrix.Clone() as double[,]) { }
@@ -43,6 +44,7 @@ namespace Lab2Sharp
         public MyMatrix(string[] array) : this(ConvertToMatrix(array)) { }
         public MyMatrix(string input) : this(ConvertToMatrix(input)) { }
         public MyMatrix(int height, int widgth) : this(new double[height, widgth]) { }
+        public MyMatrix(int height, int widgth, double valueToFill) : this(FillMatrix(height, widgth, valueToFill)) { }
         public MyMatrix() : this(new double[1, 1]) { }
         
         private static bool IsMatrix(string matrix) => IsMatrix(matrix.Split('\n'));
@@ -84,8 +86,7 @@ namespace Lab2Sharp
         }
         public static double[,] ConvertToMatrix(string[] enteredLines)
         {
-            if (IsMatrix(enteredLines))
-            {
+            if (IsMatrix(enteredLines)) {
                 int numberOfRows = enteredLines.Length;
                 int numOfColumns = enteredLines[0].Split(new string[] { " " }, 
                     StringSplitOptions.RemoveEmptyEntries).Length;
@@ -103,17 +104,7 @@ namespace Lab2Sharp
             }
         }
         public static double[,] ConvertToMatrix(string input) => ConvertToMatrix(input.Split('\n'));
-
-        /* 
-        operator + додавання двох матриць (якщо вони мають однаковий розмір)
-    	operator * множення двох матриць (якщо кількість стовпчиків першої дорівнює кількості рядків другої) 
-    	Властивості (Properties) Height та Width, що дозволяють взнати (але не дозволяють змінити) «висоту» (кількість рядків) та «ширину» (кількість стовпчиків)
-    	Java-style getter-и (без setter-ів) кількості рядків getHeight() та кількості стовпчиків getWidth()
-    	Індексатори, що дозволяють публічно доступатися до будь-якого окремого елемента матриці (як взнавати його значення, так і змінювати) 
-    	Java-style getter та setter для окремого елемента (getter має два параметри — номер рядка і номер стовпчика, 
-        setter має три параметра — номер рядка, номер стовпчика, і значення, яке записати у той рядок і стовпчик)
-    	*/
-
+        
         public static MyMatrix operator +(MyMatrix m1, MyMatrix m2)
         {
             if (m1.Height != m2.Height || m1.Widgth != m2.Widgth) {
@@ -198,18 +189,6 @@ namespace Lab2Sharp
                 Console.WriteLine(formattedMatrix.ToString());
             }
         }
-
-        /* Non-static methods
-        •	Метод (не статичний; private або protected) GetTransponedArray(), що повертає новостворений масив double[,] 
-        (не MyMatrix, а просто масив), у якому вміст елементів транспонований відносно тієї матриці, для якої він викликався
-
-        •	Метод (не статичний) MyMatrix GetTransponedCopy(), який би створював новий примірник MyMatrix,
-        у якому вміст матриці транспонований відносно тієї, для якої він викликався; 
-        технічну роботу по власне транспонуванню не повторювати, а використати результат GetTransponedArray()
-
-        •	Метод (не статичний) void TransponeMe(), який би замінював матрицю, для якої викликається, 
-        на транспоновану (теж використати GetTransponedArray(), але щоб результат змінився сам this-примірник MyMatrix).
-         */
         
         public double[,] GetTransponedArray()
         {
@@ -221,7 +200,24 @@ namespace Lab2Sharp
             }
             return transposedMatrix;
         }
-        public void TransponeMe() => matrix = GetTransponedArray();
         public MyMatrix GetTransponedCopy() => new MyMatrix((double[,])GetTransponedArray().Clone());
+        public void TransponeMe()
+        {
+            matrix = GetTransponedArray();
+            int temp = Widgth;
+            Widgth = Height;
+            Height = temp;
+        }
+
+        public static double[,] FillMatrix(int height, int widgth, double valueToFill)
+        {
+            double[,] matrix = new double[height, widgth];
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < widgth; col++){
+                    matrix[row, col] = valueToFill;
+                }
+            }
+            return matrix;
+        }
     }
 }

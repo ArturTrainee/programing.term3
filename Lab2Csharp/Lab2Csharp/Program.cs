@@ -13,7 +13,6 @@ namespace Lab2Csharp
             WriteLine("1. Show MyMatrix class options");
             WriteLine("2. Show MyFrac class options");
             WriteLine("Enter any other key to exit...");
-            
             switch (ReadLine()) {
                 case "1":
                     MyMatrix matrix = InitializeMatrix();
@@ -59,16 +58,51 @@ namespace Lab2Csharp
                 }
             } while (matrixLenght[0] < 1 || matrixLenght[1] < 1);
 
-            StringBuilder enteredLines = new StringBuilder();
-            WriteLine($"Enter {matrixLenght[1]} matrix elements, in {matrixLenght[0]} lines");
-            for (int line = 0; line < matrixLenght[0]; line++) {
-                enteredLines.Append(ReadLine());
+            WriteLine("Fill matrix with single value? [y/n]");
+            switch (ReadLine()) {
+                case "y":
+                    double valueToFill;
+                    do { Write("Enter desired value: ");
+                    } while (!double.TryParse(ReadLine(), out valueToFill));
+                    return new MyMatrix(matrixLenght[0], matrixLenght[1], valueToFill);
+                case "n":
+                    StringBuilder correctLines = new StringBuilder();
+                    string enteredLine;
+                    for (int numOfLine = 0; numOfLine < matrixLenght[0];) {
+                        WriteLine($"Enter {numOfLine + 1}st matrix row values:");
+                        enteredLine = ReadLine();
 
-                if(line < matrixLenght[0] - 1) {
-                    enteredLines.Append("\n");
-                }
+                        if (enteredLine.Split(new string[] { " " },
+                            StringSplitOptions.RemoveEmptyEntries).Length != matrixLenght[0]) {
+                            WriteLine("Number of entered values is not equals to the desired number of elements in row");
+                        }
+                        else {
+                            correctLines.Append(enteredLine);
+                            if (numOfLine < matrixLenght[0] - 1) {
+                                correctLines.Append("\n");
+                            }
+                            numOfLine++;
+                        }
+                    }
+                    return new MyMatrix(correctLines.ToString());
+                default:
+                    WriteLine("Invalid option entered. Creating empty matrix");
+                    return new MyMatrix(matrixLenght[0], matrixLenght[1], 0);
             }
-            return new MyMatrix(enteredLines.ToString());
+        }
+        private static int[] GetValuePosition()
+        {
+            int[] valuePositions = new int[2];
+            for (int i = 0; i < valuePositions.Length; i++) {
+                Write("Enter value's number of " + (i == 0 ? "row": "column") + ": ");
+                do {
+                    if (int.TryParse(ReadLine(), out valuePositions[i]) || valuePositions[i] < 0){
+                        WriteLine("Invalid number of " + (i == 0 ? "row" : "column") + " entered");
+                    }
+                    --valuePositions[i];
+                } while (int.TryParse(ReadLine(), out valuePositions[i]) || valuePositions[i] < 0);
+            }
+            return valuePositions;
         }
         private static MyFrac InitializeFraction()
         {
@@ -78,8 +112,7 @@ namespace Lab2Csharp
         private static int GetNumber()
         {
             int number;
-            do {
-                WriteLine("Enter the number:");
+            do { WriteLine("Enter the number:");
             } while (!int.TryParse(ReadLine(), out number));
             return number;
         }
@@ -87,7 +120,6 @@ namespace Lab2Csharp
         {
             int[] valuePosition;
             bool executeOptions = true;
-
             do {
                 Write("Enter the option: ");
                 switch (ReadLine()) {
@@ -107,15 +139,17 @@ namespace Lab2Csharp
                         MyMatrix.PrintFormattedMatrix(baseMatrix);
                         break;
                     case "5":
-                        Write("Enter value's number of row and column to get: ");
-                        valuePosition = Array.ConvertAll(ReadLine().Split(' '), int.Parse);
+                        valuePosition = GetValuePosition();
                         WriteLine("Value: " + baseMatrix.GetValue(valuePosition[0], valuePosition[1]));
                         break;
                     case "6":
-                        Write("Enter value's number of row and column to set: ");
-                        valuePosition = Array.ConvertAll(ReadLine().Split(' '), int.Parse);
-                        Write("Enter value to set: ");
-                        int value = int.Parse(ReadLine());
+                        valuePosition = GetValuePosition();
+                        int value;
+                        do { Write("Enter the value to set: ");
+                            if(!int.TryParse(ReadLine(), out value)) {
+                                WriteLine("Invalid value entered");
+                            }
+                        } while(!int.TryParse(ReadLine(), out value));
                         baseMatrix.SetValue(valuePosition[0], valuePosition[1], value);
                         MyMatrix.PrintFormattedMatrix(baseMatrix);
                         break;
@@ -131,8 +165,7 @@ namespace Lab2Csharp
         private static void ExecuteFractionOptions(ref MyFrac fraction)
         {
             bool executeOptions = true;
-            do {
-                Write("Enter the option: ");
+            do { Write("Enter the option: ");
                 switch (ReadLine()) {
                     case "1":
                         WriteLine(MyFrac.ToStringWithIntegerPart(fraction));
