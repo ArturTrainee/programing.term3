@@ -1,5 +1,4 @@
-﻿using System;
-using Lab2Sharp;
+﻿using Lab2Sharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Lab2Tests

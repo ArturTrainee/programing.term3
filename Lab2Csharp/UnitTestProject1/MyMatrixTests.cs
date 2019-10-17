@@ -9,17 +9,23 @@ namespace Lab2Tests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TryToMultiply_InvalidMyMatrix_By_MyMatrix_ThrowsArgumentException()
+        public void TryToCreate_MyMatrix_Instance_From_Invalid_String_ExceptionThrown()
+        {
+            MyMatrix notRectangularMatrix = new MyMatrix("1 2 3\n4 5\n7 8 9\n");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TryToMultiply_InvalidMyMatrix_By_MyMatrix_ExceptionThrown()
         {
             MyMatrix firstM = new MyMatrix("1 2\n3 4\n5 6");
             MyMatrix secondM = new MyMatrix("7 8\n9 10 \n11 12");
-
             MyMatrix matrixSum = firstM * secondM;
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TryToAdd_InvalidMyMatrix_To_MyMatrix_ThrowsArgumentException()
+        public void TryToAdd_InvalidMyMatrix_To_MyMatrix_ExceptionThrown()
         {
             MyMatrix firstM = new MyMatrix("1 2\n3 4");
             MyMatrix secondM = new MyMatrix("7 8\n9 10\n11 12");
@@ -28,7 +34,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Operetion_Multiply_MyMatrixByMyMatrix_MyMatrixInstance_Returned()
+        public void Operetion_Multiply_MyMatrixByMyMatrix_MyMatrix_Returned()
         {
             MyMatrix firstM = new MyMatrix("1 2\n3 4\n5 6");
             MyMatrix secondM = new MyMatrix("7 8 9\n10 11 12");
@@ -39,7 +45,7 @@ namespace Lab2Tests
         }
         
         [TestMethod]
-        public void Operetion_Add_MyMatrixToMyMatrix_MyMatrixInstance_Returned()
+        public void Operetion_Add_MyMatrixToMyMatrix_MyMatrix_Returned()
         {
             MyMatrix firstM = new MyMatrix("1 2\n3 4\n5 6");
             MyMatrix secondM = new MyMatrix("5 6\n7 8\n9 10");
@@ -50,7 +56,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_CopyOf_MyMatrix_Instance_From_Other_MyMatrix_Instance()
+        public void Create_CopyOfMyMatrix__From_Other_MyMatrix()
         {
             MyMatrix matrixToClone = new MyMatrix("1 2\n3 4\n5 6");
             MyMatrix actualMatrix = new MyMatrix(matrixToClone);
@@ -63,7 +69,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_ChangedFirstRowValues_Reterned()
+        public void Create_MyMatrix_ChangedFirstRowValues_Reterned()
         {
             MyMatrix actualMatrix = new MyMatrix(
                   "1 2 3" +
@@ -85,7 +91,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_2d_Array_Of_Doubles()
+        public void Create_MyMatrix_From_2dArrayOfDoubles()
         {
             MyMatrix actualMatrix = new MyMatrix(new double[,] 
             {
@@ -102,7 +108,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_Valid_Jagged_Array_Of_Doubles()
+        public void Create_MyMatrix_From_Valid_JaggedArrayOfDoubles()
         {
             MyMatrix actualMatrix = new MyMatrix(new double[][]
             {
@@ -119,7 +125,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_Valid_Array_Of_Strings()
+        public void Create_MyMatrix_From_Valid_Array_Of_Strings()
         {
             MyMatrix actualMatrix = new MyMatrix(new string[]
             {
@@ -136,7 +142,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_Valid_String()
+        public void Create_MyMatrix_From_Valid_String()
         {
             MyMatrix actualMatrix = new MyMatrix("1 2 3\n4 5 6\n7 8 9");
 
@@ -148,23 +154,16 @@ namespace Lab2Tests
         }
         
         [TestMethod]
-        public void Create_MyMatrix_Instance_Using_EmptyConstructor_1_ElementMatrix_Returned()
+        public void Create_MyMatrix_Using_EmptyConstructor_Matrix_Returned()
         {
             MyMatrix actualMatrix = new MyMatrix();
 
             string expectedMatrix = "0 ";
             Assert.AreEqual(expectedMatrix, actualMatrix.ToString());
         }
-
+        
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void TryToCreate_MyMatrix_Instance_From_Invalid_String_ThrowsArgumentException()
-        {
-            MyMatrix notRectangularMatrix = new MyMatrix("1 2 3\n4 5\n7 8 9\n");
-        }
-
-        [TestMethod]
-        public void Create_MyMatrix_Instance_Height_3_Returned()
+        public void Create_MyMatrix_Height_3_Returned()
         {
             MyMatrix actualMatrix = new MyMatrix(new double[,]
             {
@@ -177,7 +176,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_Width_2_Returned()
+        public void Create_MyMatrix_Width_2_Returned()
         {
             MyMatrix matrix = new MyMatrix(new double[,]
             {
@@ -190,7 +189,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_2d_Array_TransponedArray_Returned()
+        public void Create_MyMatrix_From_2dArray_TransponedArray_Returned()
         {
             double[,] expectedArray = new double[,]
             {
@@ -212,7 +211,7 @@ namespace Lab2Tests
         }
 
         [TestMethod]
-        public void Create_MyMatrix_Instance_From_2d_Array_Copyof_TransponedMatrix_Returned()
+        public void Create_MyMatrix_From_2dArray_CopyofTransponedMatrix_Returned()
         {
             MyMatrix matrixToCopy = new MyMatrix(new double[,]
             {
