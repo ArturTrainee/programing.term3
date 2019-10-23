@@ -16,30 +16,12 @@ namespace Lab2Csharp
             switch (ReadLine()) {
                 case "1":
                     MyMatrix matrix = InitializeMatrix();
-                    WriteLine("\tMyMatrix options:");
-                    WriteLine("1. Add the base matrix to other matrix");
-                    WriteLine("2. Mulitply the base matrix to other matrix");
-                    WriteLine("3. Transpose the base matrix");
-                    WriteLine("4. Show base matrix");
-                    WriteLine("5. Get base matrix value by index");
-                    WriteLine("6. Set base matrix value by index");
-                    WriteLine("7. Reset base matrix");
-                    WriteLine("Enter any other key to exit...");
+                    ShowMatrixOptions();
                     ExecuteMatrixOptions(ref matrix);
                     break;
                 case "2":
                     MyFrac fraction = InitializeFraction();
-                    WriteLine("\tMyFrac options:");
-                    WriteLine("1. Show the fration's integer part");
-                    WriteLine("2. Show the fraction as double value");
-                    WriteLine("3. Add the fraction to other fraction");
-                    WriteLine("4. Substract the fraction from other fraction");
-                    WriteLine("5. Multiply the fraction by other fraction");
-                    WriteLine("6. Divide the fraction by other fraction");
-                    WriteLine("7. Show RGR113LeftSum");
-                    WriteLine("8. Show RGR115LeftSum");
-                    WriteLine("9. Reset the fraction");
-                    WriteLine("Enter any other key to exit...");
+                    ShowFractionOptions();
                     ExecuteFractionOptions(ref fraction);
                     break;
             }
@@ -90,6 +72,7 @@ namespace Lab2Csharp
                     return new MyMatrix(matrixLenght[0], matrixLenght[1], 0);
             }
         }
+
         private static int[] GetValuePosition()
         {
             int[] valuePositions = new int[2];
@@ -104,18 +87,20 @@ namespace Lab2Csharp
             }
             return valuePositions;
         }
-        private static MyFrac InitializeFraction()
+        
+        private static void ShowMatrixOptions()
         {
-            Write("Enter the fraction: ");
-            return new MyFrac(ReadLine());
+            WriteLine("\tMyMatrix options:");
+            WriteLine("1. Add the base matrix to other matrix");
+            WriteLine("2. Mulitply the base matrix to other matrix");
+            WriteLine("3. Transpose the base matrix");
+            WriteLine("4. Show base matrix");
+            WriteLine("5. Get base matrix value by index");
+            WriteLine("6. Set base matrix value by index");
+            WriteLine("7. Reset base matrix");
+            WriteLine("Enter any other key to exit...");
         }
-        private static int GetNumber()
-        {
-            int number;
-            do { WriteLine("Enter the number:");
-            } while (!int.TryParse(ReadLine(), out number));
-            return number;
-        }
+        
         private static void ExecuteMatrixOptions(ref MyMatrix baseMatrix)
         {
             int[] valuePosition;
@@ -125,18 +110,18 @@ namespace Lab2Csharp
                 switch (ReadLine()) {
                     case "1":
                         baseMatrix += InitializeMatrix();
-                        MyMatrix.PrintFormattedMatrix(baseMatrix);
+                        WriteLine(baseMatrix.GetFormattedMatrix());
                         break;
                     case "2":
                         baseMatrix *= InitializeMatrix();
-                        MyMatrix.PrintFormattedMatrix(baseMatrix);
+                        WriteLine(baseMatrix.GetFormattedMatrix());
                         break;
                     case "3":
                         baseMatrix.TransponeMe();
-                        MyMatrix.PrintFormattedMatrix(baseMatrix);
+                        WriteLine(baseMatrix.GetFormattedMatrix());
                         break;
                     case "4":
-                        MyMatrix.PrintFormattedMatrix(baseMatrix);
+                        WriteLine(baseMatrix.GetFormattedMatrix());
                         break;
                     case "5":
                         valuePosition = GetValuePosition();
@@ -145,13 +130,14 @@ namespace Lab2Csharp
                     case "6":
                         valuePosition = GetValuePosition();
                         int value;
-                        do { Write("Enter the value to set: ");
+                        do {
+                            Write("Enter the value to set: ");
                             if(!int.TryParse(ReadLine(), out value)) {
                                 WriteLine("Invalid value entered");
                             }
                         } while(!int.TryParse(ReadLine(), out value));
                         baseMatrix.SetValue(valuePosition[0], valuePosition[1], value);
-                        MyMatrix.PrintFormattedMatrix(baseMatrix);
+                        WriteLine(baseMatrix.GetFormattedMatrix());
                         break;
                     case "7":
                         baseMatrix = InitializeMatrix();
@@ -162,10 +148,27 @@ namespace Lab2Csharp
                 }
             } while (executeOptions);
         }
+
+        private static void ShowFractionOptions()
+        {
+            WriteLine("\tMyFrac options:");
+            WriteLine("1. Show the fration's integer part");
+            WriteLine("2. Show the fraction as double value");
+            WriteLine("3. Add the fraction to other fraction");
+            WriteLine("4. Substract the fraction from other fraction");
+            WriteLine("5. Multiply the fraction by other fraction");
+            WriteLine("6. Divide the fraction by other fraction");
+            WriteLine("7. Show RGR113LeftSum");
+            WriteLine("8. Show RGR115LeftSum");
+            WriteLine("9. Reset the fraction");
+            WriteLine("Enter any other key to exit...");
+        }
+
         private static void ExecuteFractionOptions(ref MyFrac fraction)
         {
             bool executeOptions = true;
-            do { Write("Enter the option: ");
+            do {
+                Write("Enter the option: ");
                 switch (ReadLine()) {
                     case "1":
                         WriteLine(MyFrac.ToStringWithIntegerPart(fraction));
@@ -196,6 +199,21 @@ namespace Lab2Csharp
                         break;
                 }
             } while (executeOptions);
+        }
+
+        private static MyFrac InitializeFraction()
+        {
+            Write("Enter the fraction: ");
+            return new MyFrac(ReadLine());
+        }
+
+        private static int GetNumber()
+        {
+            int number;
+            do {
+                WriteLine("Enter the number:");
+            } while (!int.TryParse(ReadLine(), out number));
+            return number;
         }
     }
 }

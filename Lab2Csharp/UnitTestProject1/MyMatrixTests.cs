@@ -172,20 +172,20 @@ namespace Lab2Tests
                 { 7, 8, },
             });
 
-            Assert.AreEqual(3, MyMatrix.GetHeight(actualMatrix));
+            Assert.AreEqual(3, actualMatrix.Height);
         }
 
         [TestMethod]
         public void Create_MyMatrix_Width_2_Returned()
         {
-            MyMatrix matrix = new MyMatrix(new double[,]
+            MyMatrix actualMatrix = new MyMatrix(new double[,]
             {
                 { 1, 2, },
                 { 4, 5, },
                 { 7, 8, },
             });
 
-            Assert.AreEqual(2, MyMatrix.GetWidth(matrix));
+            Assert.AreEqual(2, actualMatrix.Width);
         }
 
         [TestMethod]
