@@ -2,6 +2,7 @@ Lab1CSharp/Lab1CSharp/obj/Debug/
 Lab1AdditionalTask/Lab1AdditionalTaskCSharp/obj/Debug/
 Lab2Csharp/Lab2Csharp/obj/Debug/
 Lab2Csharp/UnitTestProject1/obj/Debug/
+Lab3Csharp/Lab3Csharp/obj/
 
 *.sln
 *.vs
@@ -13,6 +14,7 @@ Lab2Csharp/UnitTestProject1/obj/Debug/
 AssemblyInfo.*
 MSTest.*
 *.pdb
+*.user
 
 *.xml
 *.class
