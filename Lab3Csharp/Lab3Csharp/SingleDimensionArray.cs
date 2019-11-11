@@ -31,5 +31,5 @@ namespace Lab3Csharp
         public E GetMin() => Elements.Min();
 
         public override string ToString() => string.Join("\t", Elements.Select(e => e.ToString()).ToArray());
-        }
+    }
 }
