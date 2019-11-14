@@ -3,6 +3,7 @@ Lab1AdditionalTask/Lab1AdditionalTaskCSharp/obj/Debug/
 Lab2Csharp/Lab2Csharp/obj/Debug/
 Lab2Csharp/UnitTestProject1/obj/Debug/
 Lab3Csharp/Lab3Csharp/obj/
+Lab3Java/out/
 Lab4Csharp/Lab4Csharp/obj/
 Lab4Csharp/Lab4Task2/obj/
 
@@ -18,6 +19,7 @@ MSTest.*
 *.pdb
 *.user
 
+*.idea
 *.xml
 *.class
 *.html
