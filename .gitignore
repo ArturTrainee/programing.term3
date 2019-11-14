@@ -23,7 +23,6 @@ MSTest.*
 *.xml
 *.class
 *.html
-*.iml
 *.kotlin_module
 
 *.txt
