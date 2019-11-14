@@ -10,7 +10,7 @@ namespace Lab3Csharp
 
         public TVector3D() : this(0, 0, 0) { }
 
-        public TVector3D(double[] cordinates) : this(cordinates[0], cordinates[1], cordinates[1]) { }
+        public TVector3D(double[] cordinates) : this(cordinates[0], cordinates[1], cordinates[2]) { }
 
         public TVector3D(double x, double y, double z) { X = x; Y = y; Z = z; }
 
