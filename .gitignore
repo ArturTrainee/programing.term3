@@ -1,3 +1,4 @@
+Tasks_Info/
 Lab1CSharp/Lab1CSharp/obj/Debug/
 Lab1AdditionalTask/Lab1AdditionalTaskCSharp/obj/Debug/
 Lab2Csharp/Lab2Csharp/obj/Debug/
@@ -6,6 +7,8 @@ Lab3Csharp/Lab3Csharp/obj/
 Lab3Java/out/
 Lab4Csharp/Lab4Csharp/obj/
 Lab4Csharp/Lab4Task2/obj/
+Lab5Csharp/Lab5Csharp/obj//Debug/
+Lab5Csharp/Lab5ShapesDrawing/obj//Debug/
 
 *.sln
 *.vs
