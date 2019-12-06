@@ -34,10 +34,11 @@ namespace Lab4Csharp
                             using (StreamReader streamReader = new StreamReader(
                                 File.Open(RESOURCES_PATH + "\\" + fileNames[i], FileMode.Open)))
                             {
-                                line = streamReader.ReadLine();
-                                pairValues[0] = int.Parse(line);
-                                line = streamReader.ReadLine();
-                                pairValues[1] = int.Parse(line);
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    line = streamReader.ReadLine();
+                                    pairValues[j] = int.Parse(line);
+                                }
                             }
                         }
                         catch (FileNotFoundException ex)
@@ -46,10 +47,13 @@ namespace Lab4Csharp
                             WriteLine(ex.Message);
                             continue;
                         }
-                        catch (Exception ex) when (ex is FormatException || ex is ArgumentNullException)
+                        catch (Exception ex) when (
+                           ex is FormatException 
+                        || ex is ArgumentNullException 
+                        || ex is ArgumentException)
                         {
                             invalidFilesTracker.Write(fileNames[i] + " ");
-                            WriteLine(ex.Message);
+                            WriteLine("Invalid argument in file " + fileNames[i]);
                             continue;
                         }
                         catch (OverflowException ex)
