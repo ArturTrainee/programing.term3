@@ -10,7 +10,6 @@ Lab4Csharp/Lab4Task2/obj/
 Lab5Csharp/Lab5Csharp/obj//Debug/
 Lab5Csharp/Lab5ShapesDrawing/obj//Debug/
 
-*.sln
 *.vs
 *.config
 *.exe
