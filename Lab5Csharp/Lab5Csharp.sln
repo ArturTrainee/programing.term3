@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab5Csharp", "Lab5Csharp\Lab5Csharp.csproj", "{9344B9BF-43B4-4E71-88F9-6036DBC5BC3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab5ShapesDrawing", "Lab5ShapesDrawing\Lab5ShapesDrawing.csproj", "{CED49D2C-42BA-4A6C-8E56-BE4029E9F765}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9344B9BF-43B4-4E71-88F9-6036DBC5BC3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9344B9BF-43B4-4E71-88F9-6036DBC5BC3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9344B9BF-43B4-4E71-88F9-6036DBC5BC3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9344B9BF-43B4-4E71-88F9-6036DBC5BC3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED49D2C-42BA-4A6C-8E56-BE4029E9F765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED49D2C-42BA-4A6C-8E56-BE4029E9F765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED49D2C-42BA-4A6C-8E56-BE4029E9F765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED49D2C-42BA-4A6C-8E56-BE4029E9F765}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7620D5A-EFCC-4665-BF39-4619DBEFD71D}
+	EndGlobalSection
+EndGlobal
