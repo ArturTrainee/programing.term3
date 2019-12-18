@@ -8,6 +8,7 @@ namespace Lab5Csharp
         private readonly double im;
 
         public double Real { get; }
+
         public double Imaginary { get; }
 
         public MyComplex() : this(1.0, 1.0) { }
@@ -31,6 +32,7 @@ namespace Lab5Csharp
             double denom = (that.re * that.re) + (that.im * that.im);
             if (denom == 0)
                 return new MyComplex(double.NaN, double.NaN);
+
             return new MyComplex(((re * that.re) + (im * that.im)) / denom,
                                  ((that.im * re) - (re * that.im)) / denom);
         }
@@ -43,6 +45,7 @@ namespace Lab5Csharp
                 return im + "i";
             if (im < 0)
                 return re + " - " + (-im) + "i";
+
             return re + " + " + im + "i";
         }
     }
