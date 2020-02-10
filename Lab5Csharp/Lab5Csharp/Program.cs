@@ -3,28 +3,8 @@ using static System.Console;
 
 namespace Lab5Csharp
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
-        {
-            MyFrac[] fracs = CreateRfactions();
-            MyComplex[] complexNums = CreateComplexNumbers();
-            testAPlusBSquare(fracs[0], fracs[1]);
-            testAPlusBSquare(complexNums[0], complexNums[1]);
-            testSquaresDifference(fracs[0], fracs[1]);
-            testSquaresDifference(complexNums[0], complexNums[1]);
-            SortFractions(fracs);
-            try
-            {
-                WriteLine(fracs[0].Divide(MyFrac.ZERO));
-            }
-            catch (DivideByZeroException ex)
-            {
-                WriteLine(ex.Message);
-            }
-            ReadKey();
-        }
-
         private static MyComplex[] CreateComplexNumbers()
         {
             return new MyComplex[]
@@ -44,6 +24,32 @@ namespace Lab5Csharp
             };
         }
 
+        private static void Main(string[] _)
+        {
+            MyFrac[] fracs = CreateRfactions();
+            MyComplex[] complexNums = CreateComplexNumbers();
+            TestAPlusBSquare(fracs[0], fracs[1]);
+            TestAPlusBSquare(complexNums[0], complexNums[1]);
+            TestSquaresDifference(fracs[0], fracs[1]);
+            TestSquaresDifference(complexNums[0], complexNums[1]);
+            SortFractions(fracs);
+            try
+            {
+                WriteLine(fracs[0].Divide(MyFrac.ZERO));
+            }
+            catch (DivideByZeroException ex)
+            {
+                WriteLine(ex.Message);
+            }
+            ReadKey();
+        }
+
+        private static void PrintIMyNumberArray(MyFrac[] fracs)
+        {
+            Array.ForEach(fracs, f => Write(f.ToString() + " "));
+            WriteLine();
+        }
+
         private static void SortFractions(MyFrac[] fracs)
         {
             WriteLine("\nFractions array before sorting:");
@@ -53,13 +59,7 @@ namespace Lab5Csharp
             PrintIMyNumberArray(fracs);
         }
 
-        private static void PrintIMyNumberArray(MyFrac[] fracs)
-        {
-            Array.ForEach(fracs, f => Write(f.ToString() + " "));
-            WriteLine();
-        }
-
-        static void testAPlusBSquare<T>(T a, T b) where T : IMyNumber<T>
+        private static void TestAPlusBSquare<T>(T a, T b) where T : IMyNumber<T>
         {
             WriteLine("=== Starting testing (a+b)^2=a^2+2ab+b^2 with a = " + a + ", b = " + b + " ===");
             T aPlusB = a.Add(b);
@@ -82,7 +82,7 @@ namespace Lab5Csharp
             WriteLine("=== Finishing testing (a+b)^2=a^2+2ab+b^2 with a = " + a + ", b = " + b + " ===");
         }
 
-        static void testSquaresDifference<T>(T a, T b) where T : IMyNumber<T>
+        private static void TestSquaresDifference<T>(T a, T b) where T : IMyNumber<T>
         {
             WriteLine("=== Starting testing (a-b)^2=a^2-2ab+b^2 with a = " + a + ", b = " + b + " ===");
             T aPlusB = a.Subtract(b);

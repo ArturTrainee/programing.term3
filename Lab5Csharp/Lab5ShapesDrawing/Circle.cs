@@ -3,17 +3,17 @@ using System.Drawing;
 
 namespace Lab5ShapesDrawing
 {
-    class Circle : Figure
+    internal class Circle : Figure
     {
         public readonly Form1 form1;
-
-        public int Radius { get; }
 
         public Circle(int centerX, int centerY, int radius, Form1 form1) : base(centerX, centerY)
         {
             Radius = radius;
             this.form1 = form1 ?? throw new ArgumentNullException("Form is null");
         }
+
+        public int Radius { get; }
 
         public override void DrawBlack()
         {

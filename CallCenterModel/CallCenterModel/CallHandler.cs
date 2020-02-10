@@ -4,32 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Console;
 
 namespace CallCenterModel
 {
-    class CallHandler
+    internal class CallHandler
     {
-        public void RunCallsHandling(ConcurrentQueue<Call> calls, List<Employee> employees)
-        {
-            while (!calls.IsEmpty)
-            {
-                var employee = findEmployee(employees);
-                if (employee is null)
-                {
-                    Thread.Sleep(5000);
-                }
-                else
-                {
-                    employee.State = EmployeeState.BUSY;
-                    Task callResponse = Task.Run(delegate ()
-                    {
-                        employee.ResponseCall(calls);
-                    });
-                }
-            }
-        }
-
-        public Employee findEmployee(IEnumerable<Employee> employees)
+        public Employee FindEmployee(IEnumerable<Employee> employees)
         {
             if (employees is null)
             {
@@ -37,27 +18,48 @@ namespace CallCenterModel
             }
 
             var availableEmployees = employees.Where(e => e.State == EmployeeState.AVAILABLE);
-            Console.WriteLine("Available operators: " + availableEmployees.Count());
-            if (availableEmployees.Count() == 0) return null;
+            WriteLine($"Available operators: {availableEmployees.Count()}\n");
+            if (!availableEmployees.Any())
+            {
+                return null;
+            }
 
             var employee = availableEmployees.FirstOrDefault(e => e.Type == EmployeeType.OPERATOR);
             if (employee is null)
             {
-                Console.WriteLine("No available operators founded");
+                WriteLine("No available operators were founded\n");
                 employee = availableEmployees.FirstOrDefault(e => e.Type == EmployeeType.SUPERVISOR);
                 if (employee is null)
                 {
-                    Console.WriteLine("No available supervisors founded");
+                    WriteLine("No available supervisors were founded\n");
                     employee = availableEmployees.FirstOrDefault(e => e.Type == EmployeeType.DIRECTOR);
                     if (employee is null)
                     {
-                        Console.WriteLine("No available directors founded");
+                        WriteLine("No available employees were founded\n");
                         return null;
                     }
                 }
             }
-            Console.WriteLine("Employee of type " + employee.Type + " founded");
+            WriteLine($"{employee} were founded\n");
             return employee;
+        }
+
+        public void RunCallsHandling(ConcurrentQueue<Call> calls, List<Employee> employees)
+        {
+            while (!calls.IsEmpty)
+            {
+                var employee = FindEmployee(employees);
+                if (employee is null && !calls.IsEmpty)
+                {
+                    int minCallSeconds = calls.OrderBy(call => call.DurationSec).FirstOrDefault()?.DurationSec ?? 0;
+                    Thread.Sleep(minCallSeconds * 1000);
+                }
+                else
+                {
+                    employee.State = EmployeeState.BUSY;
+                    var callResponse = Task.Run(() => employee.ResponseCall(calls));
+                }
+            }
         }
     }
 }

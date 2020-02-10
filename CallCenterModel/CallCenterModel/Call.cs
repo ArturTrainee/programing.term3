@@ -7,19 +7,19 @@ namespace CallCenterModel
     {
         private static int nextId;
 
-        public int ID { get; private set; }
-        public int DurationSeconds { get; }
-
         public Call(int durationInSeconds)
         {
             if (durationInSeconds < 1)
             {
                 throw new ArgumentException("Call duration is less than 0");
             }
-            DurationSeconds = durationInSeconds;
+            DurationSec = durationInSeconds;
             ID = Interlocked.Increment(ref nextId);
         }
 
-        public override string ToString() => $"Call id = {ID}, Duration = {DurationSeconds} sec.";
+        public int DurationSec { get; }
+        public int ID { get; }
+
+        public override string ToString() => $"Call id = {ID}, Duration = {DurationSec} sec.";
     }
 }

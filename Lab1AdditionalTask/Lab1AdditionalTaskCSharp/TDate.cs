@@ -5,7 +5,6 @@ namespace Lab1AdditionalTaskCSharp
 {
     public class TDate
     {
-        private string fullDate;
         public TDate(string date)
         {
             FullDate = date;
@@ -13,25 +12,10 @@ namespace Lab1AdditionalTaskCSharp
 
         public string FullDate
         {
-            get => fullDate;
-            set
-            {
-                try
-                {
-                    if (IsCorrectDate(value))
-                    {
-                        fullDate = value;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Invalid date entered " + value.ToString());
-                    }
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
+            get => FullDate;
+            set => FullDate = IsCorrectDate(value)
+                ? value
+                : throw new ArgumentException($"Invalid date entered {value}");
         }
 
         public static bool IsCorrectDate(string date) => DateTime.TryParseExact(date,

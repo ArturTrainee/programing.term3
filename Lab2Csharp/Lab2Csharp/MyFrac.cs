@@ -4,89 +4,49 @@ namespace Lab2Sharp
 {
     public class MyFrac
     {
-        private long numerator;
-        private long denominator;
-        
-        public long Numerator { get => numerator; private set => numerator = value; }
-        public long Denominator { get => denominator; private set => denominator = (value == 0 ? 1: value); }
+        public MyFrac() : this(1, 1)
+        {
+        }
 
-        public static implicit operator double(MyFrac frac) => GetDoubleValue(frac);
-        public static implicit operator string(MyFrac frac) => frac.ToString();
+        public MyFrac(long numerator) : this(numerator, 1)
+        {
+        }
 
-        public MyFrac() : this(1, 1) { }
+        public MyFrac(string fraction) : this(ConverToFraction(fraction)[0], ConverToFraction(fraction)[1])
+        {
+        }
 
-        public MyFrac(long numerator) : this(numerator, 1) { }
-
-        public MyFrac(string fraction) : this(ToFraction(fraction)[0], 
-                                              ToFraction(fraction)[1]) { }
-
-        public MyFrac(string nom, string denom) : this(IsParseableToLong(nom)   ? long.Parse(nom)   : 1,
-                                                       IsParseableToLong(denom) ? long.Parse(denom) : 1) { }
+        public MyFrac(string nom, string denom) : this(IsParseableToLong(nom) ? long.Parse(nom) : 1,
+                                                       IsParseableToLong(denom) ? long.Parse(denom) : 1)
+        { }
 
         public MyFrac(long nom, long denom)
         {
             Numerator = nom;
             Denominator = denom;
-            Reduce(this);
+            Simplify(this);
         }
 
-        public static void Reduce(MyFrac f)
+        public long Denominator { get => Denominator; private set => Denominator = value == 0 ? 1 : value; }
+        public long Numerator { get; private set; }
+
+        public static long[] ConverToFraction(string fraction)
         {
-            if (f.numerator == 0) {
-                f.denominator = 1;
-                return;
-            }
-            long gcd = GetGCD(f.numerator, f.denominator);
-            if (f.denominator < 0) gcd *= -1;
-            f.numerator /= gcd;
-            f.denominator /= gcd;
+            string[] strFrac = fraction.Split(new char[] { ',', '.', ' ', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var frac = new long[] { long.Parse(strFrac[0]), long.Parse(strFrac[1]) };
+            return frac;
         }
 
-        private static long GetGCD(long a, long b)
-        {
-            if (a == 0 || b == 0) return 1;
-            if (a < 0) a *= -1;
-            if (b < 0) b *= -1;
-            while (a != 0 && b != 0) {
-                if (a > b) a %= b;
-                else b %= a;
-            }
-            return a == 0 ? b : a;
-        }
-
-        private static bool IsParseableToLong(string value) => long.TryParse(value, out long _);
-
-        public override string ToString() => numerator + "/" + denominator;
-
-        public static string[] ToFraction(string fraction) => fraction.Split(new char[] { ',', '.', ' ', '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-        public static string ToStringWithIntegerPart(MyFrac f)
-        {
-            if(f.numerator / f.denominator != 0) {
-                return (f.numerator / f.denominator) + "+" + (f.numerator % f.denominator);
-            }
-            else return "0+" + f.ToString();
-        }
-
-        public static double GetDoubleValue(MyFrac f) => f.numerator / (double)f.denominator;
-
-        public static MyFrac operator +(MyFrac f1, MyFrac f2) => new MyFrac((f1.numerator * f2.denominator) + (f2.numerator * f1.denominator),
-                f1.denominator * f2.denominator);
-
-        public static MyFrac operator -(MyFrac f1, MyFrac f2) => new MyFrac((f1.numerator * f2.denominator) - (f2.numerator * f1.denominator),
-            f1.denominator * f2.denominator);
-
-        public static MyFrac operator *(MyFrac f1, MyFrac f2) => new MyFrac(f1.numerator * f2.numerator, f1.denominator * f2.denominator);
-
-        public static MyFrac operator /(MyFrac f1, MyFrac f2) => new MyFrac(f1.numerator * f2.denominator, f2.numerator * f1.denominator);
+        public static double GetDoubleValue(MyFrac f) => f.Numerator / (double)f.Denominator;
 
         public static MyFrac GetRGR113LeftSum(int n)
         {
             long a = 1, b = 3;
             MyFrac result = new MyFrac(1, a * b);
-            for (int i = 0; i < n; i++, a += 2, b += 2) {
+            for (int i = 0; i < n; i++, a += 2, b += 2)
+            {
                 if (i == 0) continue;
-                MyFrac f2 = new MyFrac(1, (a * b));
+                MyFrac f2 = new MyFrac(1, a * b);
                 result += f2;
             }
             return result;
@@ -95,10 +55,61 @@ namespace Lab2Sharp
         public static MyFrac GetRGR115LeftSum(int n)
         {
             MyFrac result = new MyFrac();
-            for (int i = 2; i <= n; i++) {
+            for (int i = 2; i <= n; i++)
                 result *= (new MyFrac(1, 1) - new MyFrac(1, i * i));
-            }
             return result;
         }
+
+        public static MyFrac operator -(MyFrac f1, MyFrac f2) => new MyFrac((f1.Numerator * f2.Denominator) - (f2.Numerator * f1.Denominator),
+            f1.Denominator * f2.Denominator);
+
+        public static MyFrac operator *(MyFrac f1, MyFrac f2) => new MyFrac(f1.Numerator * f2.Numerator, f1.Denominator * f2.Denominator);
+
+        public static MyFrac operator /(MyFrac f1, MyFrac f2) => new MyFrac(f1.Numerator * f2.Denominator, f2.Numerator * f1.Denominator);
+
+        public static MyFrac operator +(MyFrac f1, MyFrac f2) => new MyFrac((f1.Numerator * f2.Denominator) + (f2.Numerator * f1.Denominator),
+                f1.Denominator * f2.Denominator);
+
+        public static void Simplify(MyFrac f)
+        {
+            if (f.Numerator == 0)
+            {
+                f.Denominator = 1;
+                return;
+            }
+            long gcd = GetGCD(f.Numerator, f.Denominator);
+            if (f.Denominator < 0) gcd *= -1;
+            f.Numerator /= gcd;
+            f.Denominator /= gcd;
+        }
+
+        public static string ToStringWithIntegerPart(MyFrac f)
+        {
+            if (f.Numerator / f.Denominator != 0)
+            {
+                return $"{f.Numerator / f.Denominator}+{f.Numerator % f.Denominator}";
+            }
+            else
+            {
+                return $"0+{f}";
+            }
+        }
+
+        public override string ToString() => $"{Numerator}/{Denominator}";
+
+        private static long GetGCD(long a, long b)
+        {
+            if (a == 0 || b == 0) return 1;
+            if (a < 0) a *= -1;
+            if (b < 0) b *= -1;
+            while (a != 0 && b != 0)
+            {
+                if (a > b) a %= b;
+                else b %= a;
+            }
+            return a == 0 ? b : a;
+        }
+
+        private static bool IsParseableToLong(string value) => long.TryParse(value, out long _);
     }
 }

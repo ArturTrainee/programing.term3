@@ -1,194 +1,138 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using static System.Console;
 
 namespace Lab1AdditionalTaskCSharp
 {
-    class BankAccount : TAccount, ITransactionable
+    internal class BankAccount : TAccount, ITransactionable
     {
-        private string fullName;
-        private TMoney balance;
-        private readonly decimal euroBalance;
-        private TDate creationTime = new TDate(DateTime.Today.ToShortDateString());
+        private static int nextID = 1;
 
-        public BankAccount(string fullName) : this(fullName, 5000M, DateTime.Today.ToShortDateString()) { }
-        public BankAccount(string fullName, decimal accountBalance) : this(fullName, accountBalance, DateTime.Today.ToShortDateString()) { }
+        public BankAccount(string fullName) : this(fullName, 5000M, DateTime.Today.ToShortDateString())
+        {
+        }
+
+        public BankAccount(string fullName, decimal accountBalance) : this(fullName, accountBalance, DateTime.Today.ToShortDateString())
+        {
+        }
+
         public BankAccount(string fullName, decimal accountBalance, string customTime)
         {
             FullName = fullName;
             Balance = new TMoney(accountBalance.ToString());
             CreationTime = new TDate(customTime);
-            ++AccountNumber;
+            AccountNumber = nextID;
+            ++nextID;
         }
 
-        public override string FullName
+        public TMoney Balance
         {
-            get => fullName;
-            set
-            {
-                try
-                {
-                    if (value != null)
-                    {
-                        string[] _fullName = value.Split(' ');
-
-                        foreach (string name in _fullName)
-                        {
-                            if (IsCorrectName(name) == false)
-                            {
-                                throw new ArgumentException("Invalid name entered: " + name);
-                            }
-                        }
-                        HasCorrectFullName = true;
-                        fullName = value;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Full name should contain: first name, last name and patronymic name");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
+            get => Balance;
+            set => Balance = value.CompareTo(0) > 0
+                ? value
+                : throw new ArgumentException("Account balance can not be negative: " + value);
         }
+
         public override TDate CreationTime
         {
-            get => creationTime;
+            get => CreationTime;
             set
             {
                 if (TDate.IsCorrectDate(value.FullDate))
                 {
-                    creationTime = value;
+                    CreationTime = value;
                 }
                 else
                 {
-                    Console.WriteLine("Invalid date entered: " + value.FullDate);
-                    Console.WriteLine("Date of creation in setted as: " + creationTime);
+                    WriteLine($"Invalid date entered: {value.FullDate}");
+                    CreationTime = new TDate(DateTime.Today.ToShortDateString());
+                    WriteLine($"Date of creation in setted as: {CreationTime}");
                 }
             }
         }
-        public TMoney Balance
+
+        public decimal EuroBalance { get; private set; }
+
+        public override string FullName
         {
-            get => balance;
+            get => FullName;
             set
             {
-                try
+                if (value != null)
                 {
-                    if (value.CompareTo(0) > 0)
-                    {
-                        balance = value;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Account balance can not be negative: " + value);
-                    }
+                    FullName = IsCorrectInitials(value)
+                        ? value
+                        : throw new ArgumentException($"Invalid initials {value} entered");
                 }
-                catch (ArgumentException e)
+                else
                 {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Your balance setted to 5000 UAH");
+                    throw new ArgumentException("Full name is null");
                 }
             }
         }
-        public decimal EuroBalance { get; private set; }
-        public bool HasCorrectFullName { get; private set; }
+
+        public void AccrueInterest(int daysPassed) => Balance = Balance.Multiply(1 + (TMoney.INTEREST_RATE * daysPassed / (365 * 100)));
 
         public void ChangeName(string name)
         {
-            if (IsCorrectName(name))
-            {
-                ;
-                FullName = fullName.Replace(fullName.Split(' ')[0], name);
-            }
-            else
-            {
-                Console.WriteLine("Invalid name entered");
-            }
-        }
-
-        public static bool IsCorrectName(string name) => Regex.IsMatch(name, "[A-Z][a-z]*");
-
-        public void WithdrawMoney(TMoney withdrawalAmount)
-        {
-            try
-            {
-                if (withdrawalAmount.CompareTo(0) >= 0)
-                {
-                    if (balance.CompareTo(withdrawalAmount) >= 0)
-                    {
-                        balance = balance.Subtract(withdrawalAmount);
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Withdrawal amount: " + withdrawalAmount +
-                            " is bigger then account balance");
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Withdrawal amount: " + withdrawalAmount + " is less then 0");
-                }
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        public void RefillMoney(TMoney replenishmentAmount)
-        {
-            try
-            {
-                if (replenishmentAmount.CompareTo(0) >= 0)
-                {
-                    Balance = balance.Add(replenishmentAmount);
-                }
-                else
-                {
-                    throw new ArgumentException("Replenishment amount:" + replenishmentAmount + " is less then 0");
-                }
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        public void AccrueInterest(int daysPassed)
-        {
-            Balance = balance.Multiply(1 + TMoney.INTEREST_RATE * daysPassed / (365 * 100));
+            FullName = IsCorrectInitials(name)
+                ? FullName.Replace(FullName.Split(' ')[0], name)
+                : throw new ArgumentException($"Invalid name: {name} entered");
         }
 
         public void ConvertUAHToEuro(decimal conversionAmount)
         {
-            try
+            if (conversionAmount > 0)
             {
-                if (conversionAmount > 0)
+                if (Balance.ToDecimal() >= conversionAmount)
                 {
-                    if (balance.ToDecimal() >= conversionAmount)
-                    {
-                        decimal convertedAmount = conversionAmount / TMoney.EURO_RATE;
-                        EuroBalance += convertedAmount;
-                        balance = balance.Subtract(new TMoney(conversionAmount.ToString()));
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Conversion amount: " + conversionAmount +
-                            " is bigger then UAH balance: " + balance);
-                    }
+                    decimal convertedAmount = conversionAmount / TMoney.EURO_RATE;
+                    EuroBalance += convertedAmount;
+                    Balance = Balance.Subtract(new TMoney(conversionAmount.ToString()));
                 }
                 else
                 {
-                    throw new ArgumentException("Conversion amount: " + conversionAmount + " is less then 0");
+                    throw new ArgumentException($"Conversion amount: {conversionAmount} is bigger then UAH balance: {Balance}");
                 }
             }
-            catch (ArgumentException e)
+            else
             {
-                Console.WriteLine(e.Message);
+                throw new ArgumentException($"Conversion amount: {conversionAmount} is less then 0");
             }
         }
 
-        public string GetFullInfo() => fullName + "\n" + Balance.ToDecimal() + " UAH\ncreation time: " + CreationTime.FullDate;
+        public string GetFullInfo() => $"{FullName}\n{Balance.ToDecimal()} UAH\ncreation time: {CreationTime.FullDate}";
+
+        public void RefillMoney(TMoney replenishmentAmount)
+        {
+            Balance = (replenishmentAmount.CompareTo(0) >= 0)
+                ? Balance.Add(replenishmentAmount)
+                : throw new ArgumentException($"Replenishment amount:{replenishmentAmount} is less then 0");
+        }
+
+        public void WithdrawMoney(TMoney withdrawalAmount)
+        {
+            if (withdrawalAmount.CompareTo(0) >= 0)
+            {
+                if (Balance.CompareTo(withdrawalAmount) >= 0) Balance = Balance.Subtract(withdrawalAmount);
+                else throw new ArgumentException($"Withdrawal amount: {withdrawalAmount} is bigger then balance");
+            }
+            else
+            {
+                throw new ArgumentException($"Withdrawal amount: {withdrawalAmount} is less then 0");
+            }
+        }
+
+        private static bool IsCorrectInitials(string value)
+        {
+            foreach (string name in value.Split(' '))
+            {
+                if (!Regex.IsMatch(name, "^[A-Z][a-z]*&"))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

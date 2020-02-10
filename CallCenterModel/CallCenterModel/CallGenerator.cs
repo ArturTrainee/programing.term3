@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace CallCenterModel
 {
-    class CallGenerator
+    internal static class CallGenerator
     {
         public static void GenerateCalls(ref ConcurrentQueue<Call> calls, int amount, int minDurationSec, int maxDurationSec)
         {
@@ -12,7 +12,7 @@ namespace CallCenterModel
             {
                 calls.Enqueue(new Call(rnd.Next(minDurationSec, maxDurationSec)));
             }
-            Console.WriteLine($"{calls.Count} new incomming calls were generated");
+            Console.WriteLine($"{amount} new incomming calls were generated");
         }
     }
 }

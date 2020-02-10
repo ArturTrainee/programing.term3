@@ -8,19 +8,82 @@ using static System.Console;
  * одновимірний масив записуються спочатку його індекси, а потім – значення.
  *
  * Інвертувати порядок елементів масиву V та відновити на його основі прямокутну
- * матрицю B за зворотним принципом. 
+ * матрицю B за зворотним принципом.
  */
 
 namespace Lab1Csharp
 {
-    class Solution
+    internal static class Solution
     {
-        #region Task1 
-        static void PrintJaggedArray(int[][] array)
+        #region Task1
+
+        private static int[,] ConvertArrayToRectangularMatrix(int[] array, int numOfRows)
         {
-            foreach(int[] row in array)
+            int arrLen = array.Length;
+            int indexCounter = 0;
+            int[,] matrix = new int[numOfRows, arrLen / numOfRows];
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                foreach(int number in row)
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    matrix[i, j] = array[indexCounter];
+                    indexCounter++;
+                }
+            }
+            return matrix;
+        }
+
+        private static int[] ConvertJaggedArrayToUnivariate(int[][] jaggedArray)
+        {
+            List<int> univariateList = new List<int>();
+
+            for (int i = 0; i < jaggedArray.Length; i++)
+            {
+                for (int j = 0; j < jaggedArray[i].Length; j++)
+                {
+                    univariateList.Add(j);
+                    univariateList.Add(jaggedArray[i][j]);
+                }
+            }
+            return univariateList.ToArray();
+        }
+
+        private static int GetJaggedArrayRows()
+        {
+            while (true)
+            {
+                Write("Enter the number of matrix rows: ");
+                try
+                {
+                    int.TryParse(ReadLine(), out int rows);
+                    if (rows < 1)
+                    {
+                        throw new ArgumentException("Number of array rows is less then 1");
+                    }
+                    return rows;
+                }
+                catch (ArgumentException e)
+                {
+                    WriteLine(e);
+                }
+            }
+        }
+
+        private static void PrintArray(int[] array)
+        {
+            foreach (int item in array)
+            {
+                Write("\t" + item + " ");
+            }
+            WriteLine();
+        }
+
+        private static void PrintJaggedArray(int[][] array)
+        {
+            foreach (int[] row in array)
+            {
+                foreach (int number in row)
                 {
                     Write("\t" + number + " ");
                 }
@@ -28,7 +91,8 @@ namespace Lab1Csharp
             }
             WriteLine();
         }
-        static void PrintMatrix(int[,] matrix)
+
+        private static void PrintMatrix(int[,] matrix)
         {
             int rowLen = matrix.GetLength(0);
             int colLen = matrix.GetLength(1);
@@ -43,41 +107,11 @@ namespace Lab1Csharp
             }
             WriteLine();
         }
-        static void PrintArray(int[] array)
-        {
-            foreach (int item in array)
-            {
-                Write("\t" + item + " ");
-            }
-            WriteLine();
-        }
-        static int GetJaggedArrayRows()
-        {
-			int rows;
-			
-			while(true) {
-            	Write("Enter the number of matrix rows: ");
 
-            	try
-            	{
-                	int.TryParse(ReadLine(), out rows);
-					
-					if(rows < 1)
-                	{
-                    	throw new ArgumentException("Number of array rows is less then 1");
-                	}
-					return rows;
-            	}
-            	catch(ArgumentException e)
-            	{
-                	WriteLine(e);
-            	}
-			}
-        }
-        static int[][] SetRandomJaggedArray(int rows)
+        private static int[][] SetRandomJaggedArray(int rows)
         {
             int[][] jaggedArray = new int[rows][];
-            
+
             Random rnd = new Random();
 
             for (int i = 0; i < jaggedArray.Length; i++)
@@ -92,37 +126,8 @@ namespace Lab1Csharp
             }
             return jaggedArray;
         }
-        static int[] ConvertJaggedArrayToUnivariate(int[][] jaggedArray)
-        {
-            List<int> univariateList = new List<int>();
 
-            for (int i = 0; i < jaggedArray.Length; i++)
-            {
-                for (int j = 0; j < jaggedArray[i].Length; j++)
-                {
-                    univariateList.Add(j);
-                    univariateList.Add(jaggedArray[i][j]);
-                }
-            }
-            return univariateList.ToArray();
-        }
-        static int[,] ConvertArrayToRectangularMatrix(int[] array, int numOfRows)
-        {
-            int arrLen = array.Length;
-            int indexCounter = 0;
-            int[,] matrix = new int[numOfRows, arrLen / numOfRows];
-            
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    matrix[i, j] = array[indexCounter];
-                    indexCounter++;
-                }
-            }
-            return matrix;
-        }
-        static void ShowMatrixTaskSolution()
+        private static void ShowMatrixTaskSolution()
         {
             int[][] A = SetRandomJaggedArray(GetJaggedArrayRows());
 
@@ -139,35 +144,12 @@ namespace Lab1Csharp
             WriteLine("\nRectangular matrix B:");
             PrintMatrix(rectangularMatrix);
         }
-        #endregion
 
-        #region Task2 
-        static int[] GetTriangleSides()
-        {
-            List<int> sides = new List<int>();
-            string input;
+        #endregion Task1
 
-            for (int i = 1; i < 4; i++)
-            {
-                Write("Enter triangle side " + i + " ");
-                input = ReadLine();
+        #region Task2
 
-                if (int.TryParse(input, out _))
-                {
-                    sides.Add(int.Parse(input));
-                }
-                else if (string.IsNullOrEmpty(input))
-                {
-                    continue;
-                }
-                else
-                {
-                    WriteLine("Invalid side entered");
-                }
-            }
-            return sides.ToArray();
-        }
-        static TTriangle CreateTriangle()
+        private static TTriangle CreateTriangle()
         {
             int[] triangleSides = GetTriangleSides();
 
@@ -204,11 +186,40 @@ namespace Lab1Csharp
             }
             return null;
         }
-        static void PrintTrianglePerimeter(TTriangle t) => WriteLine("Triangle perimeter: {0}", t.GetPerimeter(t.Side1, t.Side2, t.Side3));
-        static void PrintTriangleArea(TTriangle t) => WriteLine("Triangle area: {0}", t.GetArea(t.Side1, t.Side2, t.Side3));
-        #endregion
 
-        static void Main()
+        private static int[] GetTriangleSides()
+        {
+            List<int> sides = new List<int>();
+            string input;
+
+            for (int i = 1; i < 4; i++)
+            {
+                Write("Enter triangle side " + i + " ");
+                input = ReadLine();
+
+                if (int.TryParse(input, out _))
+                {
+                    sides.Add(int.Parse(input));
+                }
+                else if (string.IsNullOrEmpty(input))
+                {
+                    continue;
+                }
+                else
+                {
+                    WriteLine("Invalid side entered");
+                }
+            }
+            return sides.ToArray();
+        }
+
+        private static void PrintTriangleArea(TTriangle t) => WriteLine("Triangle area: {0}", t.GetArea(t.Side1, t.Side2, t.Side3));
+
+        private static void PrintTrianglePerimeter(TTriangle t) => WriteLine("Triangle perimeter: {0}", t.GetPerimeter(t.Side1, t.Side2, t.Side3));
+
+        #endregion Task2
+
+        private static void Main()
         {
             WriteLine("1. Matrix task");
             WriteLine("2. Triangle task");
@@ -232,6 +243,7 @@ namespace Lab1Csharp
                             PrintTriangleArea(t);
                         }
                         break;
+
                     default: WriteLine("Invalid option selected"); break;
                 }
             }

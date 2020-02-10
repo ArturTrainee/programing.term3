@@ -1,61 +1,53 @@
-﻿using static System.Console;
+﻿using System;
+using static System.Console;
 
 namespace Lab1AdditionalTaskCSharp
 {
-    class Program
+    internal static class Program
     {
-        public static void Main(string[] args)
+        public static void Main(string[] _)
         {
-            BankAccount bankAccount;
-            string fullName;
+            WriteLine("Enter your name in format: [first name] [last name] [patronymic name]");
+            string fullName = ReadLine();
+            BankAccount bankAccount = new BankAccount(fullName);
 
-            while (true)
-            {
-                WriteLine("Enter your name in format: [first name] [last name] [patronymic name]");
-                fullName = ReadLine();
+            AskToChangeBalance(bankAccount);
+            AskToChangeCreationDate(bankAccount);
+            PrintOptions();
+            ExecuteOptions(bankAccount);
+        }
 
-                bankAccount = new BankAccount(fullName);
-
-                if (bankAccount.HasCorrectFullName)
-                {
-                    break;
-                }
-            }
-
+        private static void AskToChangeBalance(BankAccount bankAccount)
+        {
             WriteLine("Do you want to change default balance? y/n");
-
             switch (ReadLine())
             {
                 case "y":
                     WriteLine("Enter the amount of money:");
                     bankAccount.Balance = new TMoney(ReadLine());
                     break;
-                case "n":
-                    break;
+
+                case "n": break;
             }
+        }
 
+        private static void AskToChangeCreationDate(BankAccount bankAccount)
+        {
             WriteLine("Do you want to change the date of creation? y/n");
-
             switch (ReadLine())
             {
                 case "y":
                     WriteLine("Enter the date in format: [dd.mm.yyyy]");
                     bankAccount.CreationTime = new TDate(ReadLine());
                     break;
-                case "n":
-                    break;
+
+                case "n": break;
             }
+        }
 
-            WriteLine("1. Change first name");
-            WriteLine("2. Withdraw money");
-            WriteLine("3. Refill money");
-            WriteLine("4. Convert money to euro");
-            WriteLine("5. Show account information");
-            WriteLine("6. Exit\n");
-
-            bool executeOption = true;
-
-            while (executeOption)
+        private static void ExecuteOptions(BankAccount bankAccount)
+        {
+            while (true)
             {
                 WriteLine("\nChoose option: ");
                 switch (ReadLine())
@@ -76,26 +68,18 @@ namespace Lab1AdditionalTaskCSharp
                         break;
 
                     case "4":
-                        decimal uahAmount;
                         WriteLine("Enter the UAH amount you want to convert:");
-
-                        if (decimal.TryParse(ReadLine(), out uahAmount))
+                        if (decimal.TryParse(ReadLine(), out decimal uahAmount))
                         {
-                            if (uahAmount >= 0)
-                            {
-                                bankAccount.ConvertUAHToEuro(uahAmount);
-                            }
-                            else
-                            {
-                                WriteLine("UAH amount can not be negative: " + uahAmount);
-                            }
+                            if (uahAmount >= 0) bankAccount.ConvertUAHToEuro(uahAmount);
+                            else WriteLine($"UAH amount can not be negative: {uahAmount}");
                         }
                         else
                         {
                             WriteLine("Invalid UAH amount");
                         }
 
-                        WriteLine("Your euro balance: " + decimal.Round(bankAccount.EuroBalance, 2).ToString());
+                        WriteLine($"Your euro balance: {decimal.Round(bankAccount.EuroBalance, 2).ToString()}");
                         break;
 
                     case "5":
@@ -103,14 +87,20 @@ namespace Lab1AdditionalTaskCSharp
                         break;
 
                     case "6":
-                        executeOption = false;
-                        break;
-
-                    default:
+                        Environment.Exit(1);
                         break;
                 }
             }
         }
+
+        private static void PrintOptions()
+        {
+            WriteLine("1. Change first name");
+            WriteLine("2. Withdraw money");
+            WriteLine("3. Refill money");
+            WriteLine("4. Convert money to euro");
+            WriteLine("5. Show account information");
+            WriteLine("6. Exit\n");
+        }
     }
 }
-

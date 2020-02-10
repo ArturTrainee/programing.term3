@@ -1,17 +1,13 @@
-﻿using System;
-
-namespace Lab5Csharp
+﻿namespace Lab5Csharp
 {
     public class MyComplex : IMyNumber<MyComplex>
     {
-        private readonly double re;
         private readonly double im;
+        private readonly double re;
 
-        public double Real { get; }
-
-        public double Imaginary { get; }
-
-        public MyComplex() : this(1.0, 1.0) { }
+        public MyComplex() : this(1.0, 1.0)
+        {
+        }
 
         public MyComplex(double re, double im)
         {
@@ -19,13 +15,10 @@ namespace Lab5Csharp
             this.im = im;
         }
 
+        public double Imaginary { get; }
+        public double Real { get; }
+
         public MyComplex Add(MyComplex that) => new MyComplex(re + that.re, im + that.im);
-
-        public MyComplex Subtract(MyComplex that) => new MyComplex(re - that.re, im - that.im);
-
-        public MyComplex Multiply(MyComplex that) => new MyComplex(
-            (re * that.re) - (im * that.im), 
-            (re * that.im) + (that.re * im));
 
         public MyComplex Divide(MyComplex that)
         {
@@ -37,16 +30,21 @@ namespace Lab5Csharp
                                  ((that.im * re) - (re * that.im)) / denom);
         }
 
+        public MyComplex Multiply(MyComplex that) => new MyComplex(
+            (re * that.re) - (im * that.im),
+            (re * that.im) + (that.re * im));
+
+        public MyComplex Subtract(MyComplex that) => new MyComplex(re - that.re, im - that.im);
+
         public override string ToString()
         {
             if (im == 0)
                 return re.ToString();
             if (re == 0)
-                return im + "i";
+                return $"{im}i";
             if (im < 0)
-                return re + " - " + (-im) + "i";
-
-            return re + " + " + im + "i";
+                return $"{re} - {-im}i";
+            return $"{re} + {im}i";
         }
     }
 }

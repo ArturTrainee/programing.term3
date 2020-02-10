@@ -3,13 +3,9 @@ using System.Drawing;
 
 namespace Lab5ShapesDrawing
 {
-    class Rhombus : Figure
+    internal class Rhombus : Figure
     {
         public readonly Form1 form1;
-
-        public int HorDiagLen { get; }
-
-        public int VertDiagLen { get; }
 
         public Rhombus(int centerX, int centerY, int horDiagLen, int vertDiagLen, Form1 form1) : base(centerX, centerY)
         {
@@ -18,15 +14,9 @@ namespace Lab5ShapesDrawing
             this.form1 = form1 ?? throw new ArgumentNullException("Form is null");
         }
 
-        private PointF[] GetCurrPoints()
-        {
-            return new PointF[] {
-                new PointF(centerX - (VertDiagLen / 2), centerY),
-                new PointF(centerX, centerY - (HorDiagLen / 2)),
-                new PointF(centerX + (VertDiagLen / 2), centerY),
-                new PointF(centerX, centerY + (HorDiagLen / 2))
-            };
-        }
+        public int HorDiagLen { get; }
+
+        public int VertDiagLen { get; }
 
         public override void DrawBlack()
         {
@@ -38,6 +28,16 @@ namespace Lab5ShapesDrawing
         {
             Graphics graphics = form1.CreateGraphics();
             graphics.DrawPolygon(new Pen(form1.BackColor), GetCurrPoints());
+        }
+
+        private PointF[] GetCurrPoints()
+        {
+            return new PointF[] {
+                new PointF(centerX - (VertDiagLen / 2), centerY),
+                new PointF(centerX, centerY - (HorDiagLen / 2)),
+                new PointF(centerX + (VertDiagLen / 2), centerY),
+                new PointF(centerX, centerY + (HorDiagLen / 2))
+            };
         }
     }
 }
